@@ -8,7 +8,7 @@ import java.util.regex.*;
 
 public class SkylineMaker {
 
-  private Building[] buildings;
+  public Building[] buildings;
 
   public SkylineMaker(Building[] buildings) {
     this.buildings = buildings;
@@ -66,7 +66,7 @@ public class SkylineMaker {
     }
   }
 
-  private static Building[] parseFile(String filename) {
+  public static Building[] parseFile(String filename) {
     try {
       Scanner s = new Scanner(new File(filename));
       String line = s.nextLine();
@@ -99,7 +99,7 @@ public class SkylineMaker {
     return new Building[0];
   }
 
-  private static class Building {
+  public static class Building {
 
     int l, h, r;
 
@@ -116,9 +116,9 @@ public class SkylineMaker {
     }
   }
 
-  private class Skyline {
+  public class Skyline {
     
-    Roof[] roofs;
+    public Roof[] roofs;
 
     public Skyline merge(Skyline s1) {
       Skyline merged = new Skyline(roofs.length + s1.roofs.length);
@@ -166,7 +166,7 @@ public class SkylineMaker {
     }
   }
 
-  private class Roof {
+  public class Roof {
     int x, h;
 
     public Roof(int x, int h) {
