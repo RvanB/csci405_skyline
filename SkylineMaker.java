@@ -53,6 +53,11 @@ public class SkylineMaker {
       System.err.println("usage: java Skyline filename");
       System.exit(1);
     }
+    if (!(new File(args[0]).exists())) {
+      System.err.println("No such file " + args[0]);
+      System.exit(1);
+    }
+    
     SkylineMaker skylineMaker = new SkylineMaker(parseFile(args[0]));
     Skyline skyline = skylineMaker.getSkyline(skylineMaker.buildings, 0, skylineMaker.buildings.length - 1);
 
@@ -126,17 +131,15 @@ public class SkylineMaker {
       int j = 0;
       while (i < roofs.length && j < s1.roofs.length) {
         if (roofs[i].x < s1.roofs[j].x) {
-          int x0 = roofs[i].x;
           h0 = roofs[i].h;
 
-          merged.roofs[added] = new Roof(x0, Math.max(h0, h1));
+          merged.roofs[added] = new Roof(roofs[i].x, Math.max(h0, h1));
           added++;
           i++;
         } else {
-          int x1 = s1.roofs[j].x;
           h1 = s1.roofs[j].h;
 
-          merged.roofs[added] = new Roof(x1, Math.max(h0, h1));
+          merged.roofs[added] = new Roof(s1.roofs[j].x, Math.max(h0, h1));
           added++;
           j++;
         }

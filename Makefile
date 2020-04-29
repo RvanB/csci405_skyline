@@ -1,4 +1,4 @@
-Skyline:
+SkylineMaker:
 	@javac SkylineMaker.java
 
 clean:
