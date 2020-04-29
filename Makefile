@@ -1,5 +1,5 @@
 Skyline:
-	@javac Skyline.java
+	@javac SkylineMaker.java
 
 clean:
 	rm *.class
