@@ -5,6 +5,7 @@
 import java.util.Scanner;
 import java.io.File;
 import java.util.regex.*;
+import java.util.ArrayList;
 
 public class SkylineMaker {
 
@@ -16,36 +17,16 @@ public class SkylineMaker {
 
   public Skyline getSkyline(Building[] b, int x0, int x1) {
     if (x0 == x1) {
-      Skyline s = new Skyline(2);
-      s.roofs[0] = new Roof(b[x0].l, b[x0].h);
-      s.roofs[1] = new Roof(b[x0].r, 0);
+      Skyline s = new Skyline();
+      s.roofs.add(new Roof(b[x0].l, b[x0].h));
+      s.roofs.add(new Roof(b[x0].r, 0));
       return s;
     }
     int mid = (x0 + x1) / 2;
 
     Skyline s0 = getSkyline(b, x0, mid);
     Skyline s1 = getSkyline(b, mid + 1, x1);
-    return removeDuplicates(s0.merge(s1));
-  }
-
-  public Skyline removeDuplicates(Skyline s) {
-    int count = 1;
-    int read;
-    for (read = 1; read < s.roofs.length; read++) {
-      if (s.roofs[read].h != s.roofs[read - 1].h)
-        count++;
-    }
-
-    Skyline simple = new Skyline(count);
-    simple.roofs[0] = s.roofs[0];
-    int write = 1;
-    for (read = 1; read < s.roofs.length; read++) {
-      if (s.roofs[read].h != s.roofs[read - 1].h) {
-        simple.roofs[write] = s.roofs[read];
-        write++;
-      }
-    }
-    return simple;
+    return s0.merge(s1);
   }
 
   public static void main(String[] args) {
@@ -118,52 +99,48 @@ public class SkylineMaker {
 
   public class Skyline {
     
-    public Roof[] roofs;
+    public ArrayList<Roof> roofs = new ArrayList<>();
 
     public Skyline merge(Skyline s1) {
-      Skyline merged = new Skyline(roofs.length + s1.roofs.length);
-      int added = 0;
+      Skyline merged = new Skyline();
 
       int h0 = 0;
       int h1 = 0;
 
       int i = 0;
       int j = 0;
-      while (i < roofs.length && j < s1.roofs.length) {
-        if (roofs[i].x < s1.roofs[j].x) {
-          h0 = roofs[i].h;
+      int oldValue = 0;
 
-          merged.roofs[added] = new Roof(roofs[i].x, Math.max(h0, h1));
-          added++;
+      while (i < roofs.size() && j < s1.roofs.size()) {
+        if (roofs.get(i).x < s1.roofs.get(j).x) {
+          h0 = roofs.get(i).h;
+
+          if (oldValue != Math.max(h0, h1)) {
+            merged.roofs.add(new Roof(roofs.get(i).x, Math.max(h0, h1)));
+            oldValue = Math.max(h0, h1);
+          }
           i++;
         } else {
-          h1 = s1.roofs[j].h;
+          h1 = s1.roofs.get(j).h;
 
-          merged.roofs[added] = new Roof(s1.roofs[j].x, Math.max(h0, h1));
-          added++;
+          if (oldValue != Math.max(h0, h1)) {
+            merged.roofs.add(new Roof(s1.roofs.get(j).x, Math.max(h0, h1)));
+            oldValue = Math.max(h0, h1);
+          }
           j++;
         }
       }
-      while (i < roofs.length) {
-        merged.roofs[added] = roofs[i];
-        added++;
+      while (i < roofs.size()) {
+        merged.roofs.add(roofs.get(i));
         i++;
       }
-      while (j < s1.roofs.length) {
-        merged.roofs[added] = s1.roofs[j];
-        added++;
+      while (j < s1.roofs.size()) {
+        merged.roofs.add(s1.roofs.get(j));
         j++;
       }
       return merged;
     }
 
-    public Skyline(Roof[] roofs) {
-      this.roofs = roofs;
-    }
-
-    public Skyline(int length) {
-      roofs = new Roof[length];
-    }
   }
 
   public class Roof {

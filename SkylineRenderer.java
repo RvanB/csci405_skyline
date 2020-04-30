@@ -18,12 +18,12 @@ public class SkylineRenderer extends JPanel{
     SkylineMaker maker = new SkylineMaker(SkylineMaker.parseFile(args[0]));
     SkylineMaker.Skyline skyline = maker.getSkyline(maker.buildings, 0, maker.buildings.length - 1);
 
-    int w = tileSize * skyline.roofs[skyline.roofs.length - 1].x;
+    int w = tileSize * skyline.roofs.get(skyline.roofs.size() - 1).x;
 
-    int h = skyline.roofs[0].h;
-    for (int i = 1; i < skyline.roofs.length; i++) {
-      if (skyline.roofs[i].h > h) {
-        h = skyline.roofs[i].h + 2;
+    int h = skyline.roofs.get(0).h;
+    for (int i = 1; i < skyline.roofs.size(); i++) {
+      if (skyline.roofs.get(i).h > h) {
+        h = skyline.roofs.get(i).h + 2;
       }
     }
     h *= tileSize;
@@ -48,9 +48,9 @@ public class SkylineRenderer extends JPanel{
     }
 
     g.setColor(Color.RED);
-    for (int i = 0; i < skyline.roofs.length - 1; i++) {
-      SkylineMaker.Roof r = skyline.roofs[i];
-      SkylineMaker.Roof n = skyline.roofs[i + 1];
+    for (int i = 0; i < skyline.roofs.size() - 1; i++) {
+      SkylineMaker.Roof r = skyline.roofs.get(i);
+      SkylineMaker.Roof n = skyline.roofs.get(i + 1);
       g.fillRect(r.x * 20, this.h - 20 * r.h, 20 * (n.x - r.x), 5);
     }
   }
